@@ -20,7 +20,7 @@
 */
 
 let characterList = document.getElementById("characters");
-let empty = true;
+let empty = false;
 
 function search(){ 
   // Erase previous results
@@ -53,8 +53,8 @@ function search(){
 
   // Call individual search functions
   empty = true;
-  if(character != ""){ getCharacters(character); }
-  else if(gender != "" || status != ""){ getAll(); }
+  if(character != ""){ empty = getCharacters(character); }
+  else if(gender != "" || status != ""){ empty = getAll(); }
   
   // determine if empty
   if(empty){
@@ -68,21 +68,29 @@ function search(){
 
 
 function getCharacters(character){
+  let found = false;
   for(let i=1; i<=826; i++){
     axios.get("https://rickandmortyapi.com/api/character/"+i).then(response => {
       if(response.data.name.toUpperCase().includes(character.toUpperCase())){
-        displayCharacter(response.data);
+        if(displayCharacter(response.data)){
+          found = true;
+        }
       }
     });
   }
+  return !found;
 }
 
 function getAll(){
+  let found = false;
   for(let i=1; i<=826; i++){
     axios.get("https://rickandmortyapi.com/api/character/"+i).then(response => {
-      displayCharacter(response.data);
+      if(displayCharacter(response.data)){
+        found = true;
+      }
     });
   }
+  return !found;
 }
 
 function refineStatus(item){
@@ -100,8 +108,8 @@ function refineGender(item){
 
 
 function displayCharacter(data){
-  if(!refineStatus(data)){ return; }
-  if(!refineGender(data)){ return; }
+  if(!refineStatus(data)){ return false; }
+  if(!refineGender(data)){ return false; }
   
   let listItem = document.createElement("div");
   listItem.className = "g-4 col-sm-6 col-md-4 col-lg-3 col-xxl-2";
@@ -118,5 +126,5 @@ function displayCharacter(data){
     </div>`;
   
   characterList.appendChild(listItem);
-  empty = false;
+  return true;
 }
