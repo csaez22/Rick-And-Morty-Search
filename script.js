@@ -52,10 +52,16 @@ function search(){
   document.getElementById("no-word-found").innerText = "";
 
   // Call individual search functions
+  empty = true
   if(character != ""){ getCharacters(character); }
   else if(gender != "" || status != ""){ getAll(); }
+  
+  // determine if empty
   if(empty){
     document.getElementById("no-word-found").innerText = "No results were found with this criteria.";
+  }
+  else{
+    document.getElementById("no-word-found").innerText = "";
   }
 }
 
