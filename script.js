@@ -53,6 +53,10 @@ function search(){
   // Call individual search functions
   if(character != ""){ getCharacters(character); }
   else if(gender != "" || status != ""){ getAll(); }
+
+  if(characterList.children.length == 0){
+    document.getElementById("no-word-found").innerText = "No results were found with this criteria.";
+  }
 }
 
 
@@ -77,13 +81,13 @@ function getAll(){
 
 function refineStatus(item){
   let status = document.getElementById("status-search-input").value;
-  if(status != "" && item.status != status){ return false; }
+  if(status != "" && item.status.toUpperCase() != status.toUpperCase()){ return false; }
   return true;
 }
 
 function refineGender(item){
   let gender = document.getElementById("gender-search-input").value;
-  if(gender != "" && item.gender != gender){ return false; }
+  if(gender != "" && item.gender.toUpperCase() != gender.toUpperCase()){ return false; }
   return true;
 }
 
