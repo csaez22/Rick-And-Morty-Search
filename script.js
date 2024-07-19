@@ -39,7 +39,8 @@ function search(){
   let character = document.getElementById("name-search-input").value;
   let status = document.getElementById("status-search-input").value;
   let gender = document.getElementById("gender-search-input").value;
-  
+  console.log(`character: ${character}\nstatus: ${status}\ngender: ${gender}`)
+
   // Ensure proper input
   if(character+status+gender == ""){
     document.getElementById("no-word-found").innerText = "Please enter your search into the input boxes above.";
@@ -58,7 +59,7 @@ function search(){
 function getCharacters(character){
   for(let i=1; i<=826; i++){
     axios.get("https://rickandmortyapi.com/api/character/"+i).then(response => {
-      if(response.data.name.includes(character)){
+      if(response.data.name.toUpperCase().includes(character.toUpperCase())){
         displayCharacter(response.data);
       }
     });
