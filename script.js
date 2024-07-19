@@ -52,6 +52,7 @@ function search(){
 
   // Call individual search functions
   if(character != ""){ getCharacters(character); }
+  else if(gender != "" || status != ""){ getAll(); }
 }
 
 
@@ -62,6 +63,14 @@ function getCharacters(character){
       if(response.data.name.toUpperCase().includes(character.toUpperCase())){
         displayCharacter(response.data);
       }
+    });
+  }
+}
+
+function getAll(){
+  for(let i=1; i<=826; i++){
+    axios.get("https://rickandmortyapi.com/api/character/"+i).then(response => {
+      displayCharacter(response.data);
     });
   }
 }
