@@ -53,11 +53,6 @@ function search(){
   // Call individual search functions
   if(character != ""){ getCharacters(character); }
   else if(gender != "" || status != ""){ getAll(); }
-
-  console.log(characterList.children.length);
-  if(characterList.children.length == 0){
-    document.getElementById("no-word-found").innerText = "No results were found with this criteria.";
-  }
 }
 
 
@@ -113,4 +108,10 @@ function displayCharacter(data){
     </div>`;
   
   characterList.appendChild(listItem);
+}
+
+function isEmpty(){
+  if(characterList.children.length == 0){
+    document.getElementById("no-word-found").innerText = "No results were found with this criteria.";
+  }
 }
