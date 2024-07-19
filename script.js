@@ -52,7 +52,7 @@ function search(){
   document.getElementById("no-word-found").innerText = "";
 
   // Call individual search functions
-  empty = true
+  empty = true;
   if(character != ""){ getCharacters(character); }
   else if(gender != "" || status != ""){ getAll(); }
   
