@@ -20,7 +20,22 @@
 */
 
 let characterList = document.getElementById("characters");
-let empty = false;
+// let empty = false;
+// Set up the MutationObserver
+const observerOptions = {
+  childList: true, // Listen for the addition or removal of child elements
+};
+
+const observerCallback = function(mutationsList, observer) {
+  for(let mutation of mutationsList) {
+    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+      document.getElementById('no-word-found').innerText = '';
+    }
+  }
+};
+
+const observer = new MutationObserver(observerCallback);
+observer.observe(characterList, observerOptions);
 
 function search(){ 
   // Erase previous results
@@ -49,48 +64,45 @@ function search(){
   }
 
   // Delete prompt statement
-  document.getElementById("no-word-found").innerText = "";
+  document.getElementById("no-word-found").innerText = "No results were found with this criteria.";
 
   // Call individual search functions
-  empty = true;
-  if(character != ""){ empty = getCharacters(character); }
-  else if(gender != "" || status != ""){ empty = getAll(); }
+  // empty = true;
+  if(character != ""){ getCharacters(character); }
+  else if(gender != "" || status != ""){ getAll(); }
   
   // determine if empty
-  if(empty){
-    document.getElementById("no-word-found").innerText = "No results were found with this criteria.";
-  }
-  else{
-    document.getElementById("no-word-found").innerText = "";
-  }
+  
+  // if(empty){
+  //   document.getElementById("no-word-found").innerText = "No results were found with this criteria.";
+  // }
+  // else{
+  //   document.getElementById("no-word-found").innerText = "";
+  // }
 }
 
 
 
 function getCharacters(character){
-  let found = false;
+  // let found = false;
   for(let i=1; i<=826; i++){
     axios.get("https://rickandmortyapi.com/api/character/"+i).then(response => {
       if(response.data.name.toUpperCase().includes(character.toUpperCase())){
-        if(displayCharacter(response.data)){
-          found = true;
-        }
+        displayCharacter(response.data);
       }
     });
   }
-  return !found;
+  // return !found;
 }
 
 function getAll(){
   let found = false;
   for(let i=1; i<=826; i++){
     axios.get("https://rickandmortyapi.com/api/character/"+i).then(response => {
-      if(displayCharacter(response.data)){
-        found = true;
-      }
+      displayCharacter(response.data);
     });
   }
-  return !found;
+  // return !found;
 }
 
 function refineStatus(item){
@@ -108,8 +120,8 @@ function refineGender(item){
 
 
 function displayCharacter(data){
-  if(!refineStatus(data)){ return false; }
-  if(!refineGender(data)){ return false; }
+  if(!refineStatus(data)){ return; }
+  if(!refineGender(data)){ return; }
   
   let listItem = document.createElement("div");
   listItem.className = "g-4 col-sm-6 col-md-4 col-lg-3 col-xxl-2";
@@ -126,5 +138,4 @@ function displayCharacter(data){
     </div>`;
   
   characterList.appendChild(listItem);
-  return true;
 }
