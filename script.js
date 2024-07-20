@@ -20,12 +20,14 @@
 */
 
 let characterList = document.getElementById("characters");
-// let empty = false;
-// Set up the MutationObserver
+
+// Setting up the MutationObserver to remove "no results found" when a result is found
+// Listen for the addition or removal of child elements
 const observerOptions = {
-  childList: true, // Listen for the addition or removal of child elements
+  childList: true, 
 };
 
+// Define function to handle mutations
 const observerCallback = function(mutationsList, observer) {
   for(let mutation of mutationsList) {
     if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -34,8 +36,25 @@ const observerCallback = function(mutationsList, observer) {
   }
 };
 
+// Create and start observer
 const observer = new MutationObserver(observerCallback);
 observer.observe(characterList, observerOptions);
+
+
+// Calling search() when enter is pressed
+// Get the input fields
+let inputs = [document.getElementById("name-search-input"), document.getElementById("status-search-input"), document.getElementById("gender-search-input")]
+
+// Execute a function when the user presses a key on the keyboard
+for(let input of inputs){
+  input.addEventListener("keypress", function(event) {
+    // If the user presses the "Enter" key, search() is called
+    if (event.key === "Enter") {
+      search();
+    }
+  });
+}
+
 
 function search(){ 
   // Erase previous results
